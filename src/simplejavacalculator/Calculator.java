@@ -1,16 +1,17 @@
-package simplejavacalculator;
+package controller;
 
-import static java.lang.Math.log;
 import static java.lang.Math.log10;
 import static java.lang.Math.pow;
 
+import java.text.DecimalFormat;
+
 public class Calculator {
     public enum BiOperatorModes {
-        normal, add, minus, multiply, divide , xpowerofy 
+        normal, add, minus, multiply, divide , xpowerofy, xrootofy 
     }
 
     public enum MonoOperatorModes {
-        square, squareRoot, oneDevidedBy, cos, sin, tan ,log , rate, abs
+        square, squareRoot, oneDevidedBy, cos, sin, tan ,log , rate, abs, arccos, arcsin, arctan
     }
 
     private Double num1, num2;
@@ -34,6 +35,10 @@ public class Calculator {
         }
         if (mode == BiOperatorModes.xpowerofy) {
             return pow(num1,num2);
+        }
+        if (mode == BiOperatorModes.xrootofy) {
+        	DecimalFormat df = new DecimalFormat("#.############");
+        	return Double.parseDouble(df.format(pow(num1, 1/num2)));
         }
 
         // never reach
@@ -77,13 +82,25 @@ public class Calculator {
             return 1 / num;
         }
         if (newMode == MonoOperatorModes.cos) {
-            return Math.cos(num);
+            return Math.cos(Math.toRadians(num));
         }
         if (newMode == MonoOperatorModes.sin) {
-            return Math.sin(num);
+            return Math.sin(Math.toRadians(num));
         }
         if (newMode == MonoOperatorModes.tan) {
-            return Math.tan(num);
+            return Math.tan(Math.toRadians(num));
+        }
+        if (newMode == MonoOperatorModes.arccos) {
+        	DecimalFormat df = new DecimalFormat("#.############");
+            return Double.parseDouble(df.format(Math.toDegrees(Math.acos(num))));
+        }
+        if (newMode == MonoOperatorModes.arcsin) {
+        	DecimalFormat df = new DecimalFormat("#.############");
+            return Double.parseDouble(df.format(Math.toDegrees(Math.asin(num))));
+        }
+        if (newMode == MonoOperatorModes.arctan) {
+        	DecimalFormat df = new DecimalFormat("#.############");
+           return Double.parseDouble(df.format(Math.toDegrees(Math.atan(num))));
         }
         if (newMode == MonoOperatorModes.log) {
             return log10(num);
