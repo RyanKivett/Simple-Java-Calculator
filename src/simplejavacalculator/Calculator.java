@@ -1,4 +1,4 @@
-package controller;
+package simplejavacalculato;
 
 import static java.lang.Math.log10;
 import static java.lang.Math.pow;
