@@ -27,13 +27,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import controller.Calculator;
+
 public class UI implements ActionListener {
     private final JFrame frame;
     private final JPanel panel;
     private final JTextArea text;
+    private final JPanel type;
     private final JButton but[], butAdd, butMinus, butMultiply, butDivide,
             butEqual, butCancel, butSquareRoot, butSquare, butOneDevidedBy,
-            butCos, butSin, butTan, butxpowerofy, butlog, butrate, butabs;
+            butCos, butSin, butTan, butxpowerofy, butlog, butrate, butabs, 
+            butStnd, butSciec;
+    private final JButton btnDec, btnSign, btnArccos, btnArcsin, btnArctan, btnxrootofy;
     private final Calculator calc;
 
     private final String[] buttonValue = { "0", "1", "2", "3", "4", "5", "6",
@@ -43,6 +48,7 @@ public class UI implements ActionListener {
         frame = new JFrame("Calculator PH");
         frame.setResizable(false);
         panel = new JPanel(new FlowLayout());
+        type = new JPanel(new FlowLayout());
 
         text = new JTextArea(2, 25);
         but = new JButton[10];
@@ -50,12 +56,15 @@ public class UI implements ActionListener {
             but[i] = new JButton(String.valueOf(i));
         }
 
+        butStnd = new JButton("Standard");
+        butSciec = new JButton("Scientific");
+        
         butAdd = new JButton("+");
         butMinus = new JButton("-");
         butMultiply = new JButton("*");
         butDivide = new JButton("/");
         butEqual = new JButton("=");
-        butSquareRoot = new JButton("√");
+        butSquareRoot = new JButton("âˆš");
         butSquare = new JButton("x*x");
         butOneDevidedBy = new JButton("1/x");
         butCos = new JButton("Cos");
@@ -65,6 +74,12 @@ public class UI implements ActionListener {
         butlog = new JButton("log10(x)");
         butrate = new JButton("x%");
         butabs = new JButton("abs(x)");
+        btnxrootofy = new JButton("ysqr(x)");
+        btnDec = new JButton(".");
+        btnSign = new JButton("+/-");
+        btnArccos = new JButton("Arccos");
+        btnArcsin = new JButton("Arcsin");
+        btnArctan = new JButton("Arctan");
 
         butCancel = new JButton("C");
 
@@ -75,34 +90,28 @@ public class UI implements ActionListener {
         frame.setVisible(true);
         frame.setSize(330, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(panel);
-
-        panel.add(text);
-       
-        for (int i = 1; i < 10; i++) {
-            panel.add(but[i]);
-            but[i].addActionListener(this);
+        frame.add(panel);       
+        
+        type.add(butStnd);
+        type.add(butSciec);
+        
+        butStnd.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		writer(calc.reset());
+        		initStandard();
+        	}       	
+        });
+        
+        butSciec.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		writer(calc.reset());
+        		initScientific();
+        	}       	
+        });
+        
+        for (int i = 0; i < 10; i++) {
+        	but[i].addActionListener(this);
         }
-        panel.add(but[0]);
-        but[0].addActionListener(this);
-
-        panel.add(butAdd);
-        panel.add(butMinus);
-        panel.add(butMultiply);
-        panel.add(butDivide);
-        panel.add(butSquare);
-        panel.add(butSquareRoot);
-        panel.add(butOneDevidedBy);
-        panel.add(butCos);
-        panel.add(butSin);
-        panel.add(butTan);
-        panel.add(butxpowerofy);
-        panel.add(butlog);
-        panel.add(butrate);
-        panel.add(butabs);
-
-        panel.add(butEqual);
-        panel.add(butCancel);
 
         butAdd.addActionListener(this);
         butMinus.addActionListener(this);
@@ -118,9 +127,82 @@ public class UI implements ActionListener {
         butlog.addActionListener(this);
         butrate.addActionListener(this);
         butabs.addActionListener(this);
+        
+        btnxrootofy.addActionListener(this);
+        btnDec.addActionListener(this);
+        btnSign.addActionListener(this);
+        btnArccos.addActionListener(this);
+        btnArcsin.addActionListener(this);
+        btnArctan.addActionListener(this);
 
         butEqual.addActionListener(this);
         butCancel.addActionListener(this);
+        
+        initStandard();
+    }
+    
+    public void initStandard() {
+    	panel.removeAll();
+    	panel.updateUI();
+    	
+        panel.add(text);
+        panel.add(type);
+        
+        for (int i = 0; i < 10; i++) {
+            panel.add(but[i]);
+        }
+//        panel.add(but[0]);
+//        but[0].addActionListener(this);
+
+        panel.add(butAdd);
+        panel.add(butMinus);
+        panel.add(butMultiply);
+        panel.add(butDivide);
+        panel.add(butSquare);
+        panel.add(butSquareRoot);
+        panel.add(butOneDevidedBy);
+        panel.add(butrate);
+        panel.add(btnDec);
+        panel.add(btnSign);
+
+        panel.add(butEqual);
+        panel.add(butCancel);
+    }
+    
+    public void initScientific() {
+    	panel.removeAll();
+    	panel.updateUI();
+    	
+        panel.add(text);
+        panel.add(type);
+        
+        for (int i = 0; i < 10; i++) {
+            panel.add(but[i]);
+        }
+        
+        panel.add(butAdd);
+        panel.add(butMinus);
+        panel.add(butMultiply);
+        panel.add(butDivide);
+        panel.add(butSquare);
+        panel.add(butSquareRoot);
+        panel.add(butOneDevidedBy);
+        panel.add(butCos);
+        panel.add(butSin);
+        panel.add(butTan);
+        panel.add(btnArccos);
+        panel.add(btnArcsin);
+        panel.add(btnArctan);
+        panel.add(butxpowerofy);
+        panel.add(butlog);
+        panel.add(butrate);
+        panel.add(butabs);
+        panel.add(btnxrootofy);
+        panel.add(btnDec);
+        panel.add(btnSign);
+        
+        panel.add(butEqual);
+        panel.add(butCancel);
     }
 
     @Override
@@ -185,6 +267,22 @@ public class UI implements ActionListener {
             writer(calc.calculateMono(Calculator.MonoOperatorModes.tan,
                 reader()));
         }
+        
+        if (source == btnArccos) {
+            writer(calc.calculateMono(Calculator.MonoOperatorModes.arccos,
+                reader()));
+        }
+
+        if (source == btnArcsin) {
+            writer(calc.calculateMono(Calculator.MonoOperatorModes.arcsin,
+                reader()));
+        }
+
+        if (source == btnArctan) {
+            writer(calc.calculateMono(Calculator.MonoOperatorModes.arctan,
+                reader()));
+        }
+        
         if (source == butlog) {
             writer(calc.calculateMono(Calculator.MonoOperatorModes.log,
                 reader()));
@@ -196,6 +294,24 @@ public class UI implements ActionListener {
          if(source == butabs){
              writer(calc.calculateMono(Calculator.MonoOperatorModes.abs, reader()));
          }
+        if(source == btnxrootofy) {
+        	writer(calc.calculateBi(Calculator.BiOperatorModes.xrootofy, reader()));
+        }
+         
+        if(source == btnDec) {
+        	text.replaceSelection(".");
+            return;
+        }
+        if(source == btnSign) {
+        	String str = text.getText();
+        	if(str.startsWith("-")) {
+        		text.setText(str.replace("-", ""));
+        		return;
+        	} else {
+        		text.setText("-" + str);
+        		return;
+        	}
+        }
 
         if (source == butEqual) {
             writer(calc.calculateEqual(reader()));
@@ -212,6 +328,9 @@ public class UI implements ActionListener {
         Double num;
         String str;
         str = text.getText();
+        if(str.startsWith(".")) {
+        	str = "0" + str;
+        }
         num = Double.valueOf(str);
 
         return num;
